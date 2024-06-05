@@ -1,0 +1,44 @@
+name: food_app_wow
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.3 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  google_fonts: ^6.2.1
+  flutter_lints: ^3.0.0
+  flutter_svg: ^2.0.10+1
+  awesome_snackbar_content: ^0.1.3
+  carousel_slider: ^4.2.1
+  animated_bottom_navigation_bar: ^1.3.3
+  animated_notch_bottom_bar: ^1.0.3
+  curved_navigation_bar: ^1.0.3
+  lottie: ^3.1.2
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/images/
+  fonts:
+    - family: Sora
+      fonts:
+        - asset: fonts/Sora-Regular.ttf
+        - asset: fonts/Sora-Bold.ttf
+        - asset: fonts/Sora-ExtraBold.ttf
+        - asset: fonts/Sora-ExtraLight.ttf
+        - asset: fonts/Sora-Light.ttf
+        - asset: fonts/Sora-Medium.ttf
+        - asset: fonts/Sora-SemiBold.ttf
+        - asset: fonts/Sora-Thin.ttf
