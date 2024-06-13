@@ -4,7 +4,7 @@ import 'package:food_app_wow/utils/const.dart';
 import 'package:food_app_wow/views/home_content/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -75,13 +75,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           SizedBox(height: size.height * 0.01),
                           TextFormField(
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                             cursorColor: Colors.white,
                             decoration: InputDecoration(
                               filled: true,
-                              fillColor: Color(0xFF2C2C2C),
+                              fillColor: const Color(0xFF2C2C2C),
                               hintText: 'Enter your email',
-                              hintStyle: TextStyle(color: Colors.grey),
+                              hintStyle: const TextStyle(color: Colors.grey),
                               border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.circular(size.width * 0.05),
@@ -90,10 +90,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.circular(size.width * 0.05),
-                                borderSide: BorderSide(color: Colors.orange),
+                                borderSide: const BorderSide(color: Colors.orange),
                               ),
                               prefixIcon:
-                                  Icon(Icons.email, color: Colors.white),
+                                  const Icon(Icons.email, color: Colors.white),
                             ),
                             validator: _validateEmail,
                           ),
@@ -102,14 +102,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.centerRight,
                             children: [
                               TextFormField(
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                                 cursorColor: Colors.white,
                                 obscureText: _isObscured,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: Color(0xFF2C2C2C),
+                                  fillColor: const Color(0xFF2C2C2C),
                                   hintText: 'Enter your password',
-                                  hintStyle: TextStyle(color: Colors.grey),
+                                  hintStyle: const TextStyle(color: Colors.grey),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(
                                         size.width * 0.05),
@@ -119,10 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                     borderRadius: BorderRadius.circular(
                                         size.width * 0.05),
                                     borderSide:
-                                        BorderSide(color: Colors.orange),
+                                        const BorderSide(color: Colors.orange),
                                   ),
                                   prefixIcon:
-                                      Icon(Icons.lock, color: Colors.white),
+                                      const Icon(Icons.lock, color: Colors.white),
                                 ),
                                 validator: _validatePassword,
                               ),
@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () {},
-                              child: Text(
+                              child: const Text(
                                 'Forget password ?',
                                 style: TextStyle(
                                   color: Colors.red,
@@ -233,21 +233,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _showLoginSuccessSnackbar() {
     final snackBar = SnackBar(
-      duration: Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1200),
       elevation: 0,
       behavior: SnackBarBehavior.floating,
       backgroundColor: Colors.transparent,
       content: Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
         child: AwesomeSnackbarContent(
-          color: Color.fromARGB(255, 7, 101, 40),
+          color: const Color.fromARGB(255, 7, 101, 40),
           title: 'Login Successful',
           message: 'Your account has been successfully logged in!',
           contentType: ContentType.success,
         ),
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
     );
 
     ScaffoldMessenger.of(context).hideCurrentSnackBar();

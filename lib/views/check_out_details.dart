@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app_wow/utils/const.dart';
 import 'package:food_app_wow/views/order_confirmed.dart';
+import 'package:food_app_wow/views/payment_mode_page.dart';
 
 class CheckOutDetails extends StatefulWidget {
   const CheckOutDetails({super.key});
@@ -23,12 +24,12 @@ class _CheckOutDetailsState extends State<CheckOutDetails> {
         TextEditingController addressController =
             TextEditingController(text: address);
         return AlertDialog(
-          backgroundColor: Colors.white, // Add a background color
-          elevation: 8, // Add a subtle shadow
+          backgroundColor: Colors.white,
+          elevation: 8,
           title: const Row(
             children: [
-              Icon(Icons.location_on, color: Colors.blue), // Location icon
-              SizedBox(width: 10), // Add spacing
+              Icon(Icons.location_on, color: Colors.blue),
+              SizedBox(width: 10),
               Text(
                 'Edit Address',
                 style: TextStyle(
@@ -283,41 +284,30 @@ class _CheckOutDetailsState extends State<CheckOutDetails> {
                             fontSize: 18,
                             color: Colors.white),
                       ),
-                      kWidth10,
-                      Container(
-                        height: height * 0.03,
-                        width: width * 0.06,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white),
-                        child: const Center(
-                          child: Text(
-                            "-",
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                                fontFamily: "Sora",
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
                       kWidth5,
-                      const Text(
-                        "1",
-                        style: TextStyle(
-                            fontSize: 20,
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.remove_circle_outline),
                             color: Colors.white,
-                            fontFamily: "Sora",
-                            fontWeight: FontWeight.bold),
-                      ),
-                      kWidth5,
-                      Container(
-                        height: height * 0.03,
-                        width: width * 0.06,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white),
-                        child: const Icon(Icons.add, color: Colors.black),
+                            onPressed: () {
+                              setState(() {});
+                            },
+                          ),
+                          const Text(
+                            '1',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.add_circle_outline),
+                            color: Colors.white,
+                            onPressed: () {
+                            },
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -590,8 +580,7 @@ class _CheckOutDetailsState extends State<CheckOutDetails> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const OrderConfirmed()),
+                    MaterialPageRoute(builder: (context) => const PaymentPage()),
                   );
                 },
                 icon: const Icon(Icons.confirmation_num_outlined,

@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
+import 'package:food_app_wow/provide/shoppingcart_provider.dart';
 import 'package:food_app_wow/utils/const.dart';
 import 'package:food_app_wow/views/favorite_screen.dart';
 import 'package:food_app_wow/views/notification_screen.dart';
 import 'package:food_app_wow/views/product_detail_screen.dart';
 import 'package:food_app_wow/views/shopping_cart.dart';
+import 'package:provider/provider.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,12 +33,152 @@ class OfferDetails {
 class _HomeScreenState extends State<HomeScreen> {
   int bottomNavIndex = 0;
   late PageController _pageController;
-  late Timer _timer;
-  int _currentPage = 0;
-  int _selectedCategoryIndex =
-      0; // State variable to track selected button index
 
   final ScrollController _scrollController = ScrollController();
+
+  final List<Widget> screens = [
+    const HomeScreenContent(),
+    const FavoriteScreen(),
+    const ShoppingCart(),
+    const NotificationScreen(),
+  ];
+  Color _backgroundColor = Colors.white;
+  Color _iconColor = Colors.black;
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: bottomNavIndex);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+    ));
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: PageView.builder(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            bottomNavIndex = index;
+            _updateColors();
+          });
+        },
+        itemCount: screens.length,
+        itemBuilder: (context, index) => screens[index],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: _backgroundColor, // Background color
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5), // Spread color
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        height: 70,
+        child: SalomonBottomBar(
+          selectedItemColor: Colors.white,
+          unselectedItemColor: _iconColor,
+          backgroundColor: Colors.transparent,
+          currentIndex: bottomNavIndex,
+          onTap: (index) {
+            setState(() {
+              bottomNavIndex = index;
+              _updateColors();
+            });
+            _pageController.jumpToPage(index);
+          },
+          items: [
+            SalomonBottomBarItem(
+              selectedColor: Colors.black,
+              icon: const Icon(
+                Icons.home,
+                size: 30,
+              ),
+              title: const Text("Home"),
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(
+                Icons.favorite,
+                size: 30,
+              ),
+              title: const Text("Favorite"),
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(
+                Icons.shopping_cart,
+                size: 30,
+              ),
+              title: const Text("Cart"),
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(
+                Icons.notifications,
+                size: 30,
+              ),
+              title: const Text("Notifications"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _updateColors() {
+    switch (bottomNavIndex) {
+      case 0:
+        setState(() {
+          _backgroundColor = Colors.white;
+          _iconColor = Colors.black;
+        });
+        break;
+      case 1:
+        setState(() {
+          _backgroundColor = Colors.black;
+          _iconColor = Colors.white;
+        });
+        break;
+      case 2:
+        setState(() {
+          _backgroundColor = Colors.black;
+          _iconColor = Colors.white;
+        });
+        break;
+      case 3:
+        setState(() {
+          _backgroundColor = Colors.black;
+          _iconColor = Colors.white;
+        });
+        break;
+    }
+  }
+}
+
+class HomeScreenContent extends StatefulWidget {
+  const HomeScreenContent({super.key});
+
+  @override
+  State<HomeScreenContent> createState() => _HomeScreenContentState();
+}
+
+class _HomeScreenContentState extends State<HomeScreenContent> {
+  final ScrollController _scrollController = ScrollController();
+  final PageController _pageController = PageController();
+  late Timer _timer;
+  int _currentPage = 0;
 
   final List<OfferDetails> offerDetails = [
     OfferDetails(
@@ -71,46 +212,21 @@ class _HomeScreenState extends State<HomeScreen> {
     'Biriyani',
   ];
 
-  final List<IconData> iconList = [
-    Icons.home,
-    Icons.favorite,
-    Icons.shopping_cart,
-    Icons.notifications,
-  ];
-
-  final List<Widget> screens = [
-    const HomeScreen(),
-    const FavotiteScreen(),
-    const ShoppingCart(),
-    const NotificationScreen(),
-  ];
-
-  final List<String> iconLabels = [
-    "Home",
-    "Favourite",
-    "Cart",
-    "Notifications",
-  ];
+  final int _selectedCategoryIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _currentPage);
-
-    _timer = Timer.periodic(const Duration(seconds: 4), (Timer timer) {
-      if (_currentPage < offerDetails.length - 1) {
-        setState(() {
-          _currentPage++;
-        });
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      if (_currentPage < offerDetails.length) {
+        _currentPage++;
       } else {
-        setState(() {
-          _currentPage = 0;
-        });
+        _currentPage = 0;
       }
 
       _pageController.animateToPage(
         _currentPage,
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeIn,
       );
     });
@@ -118,41 +234,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _timer.cancel();
-    _pageController.dispose();
     _scrollController.dispose();
+    _pageController.dispose();
+    _timer.cancel();
     super.dispose();
-  }
-
-  void _onCategorySelected(int index) {
-    setState(() {
-      _selectedCategoryIndex = index;
-    });
-
-    // Scroll to center the selected button
-    _scrollToSelectedButton(index);
-  }
-
-  void _scrollToSelectedButton(int index) {
-    // Calculate the position of the selected button
-    double screenWidth = MediaQuery.of(context).size.width;
-    double buttonWidth = 100.0; // Assuming a fixed width for each button
-    double offset =
-        (index * buttonWidth) - (screenWidth / 2) + (buttonWidth / 2);
-
-    _scrollController.animateTo(
-      offset,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
-    ));
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -341,10 +430,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 children: List.generate(categories.length, (index) {
                   return CategoryButton(
-                    text: categories[index],
-                    isSelected: _selectedCategoryIndex == index,
-                    onTap: () => _onCategorySelected(index),
-                  );
+                      text: categories[index],
+                      isSelected: _selectedCategoryIndex == index,
+                      onTap: () {});
                 }),
               ),
             ),
@@ -452,43 +540,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 6,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: CurvedNavigationBar(
-          index: bottomNavIndex,
-          height: 60, // Adjust the height here
-          items: List<Widget>.generate(iconList.length, (index) {
-            return Icon(
-              iconList[index],
-              size: 30,
-              color: bottomNavIndex == index ? Colors.white : Colors.black,
-            );
-          }),
-          color: Colors.white,
-          buttonBackgroundColor: OrangeButtonColor,
-          backgroundColor: Colors.transparent,
-          animationCurve: Curves.easeInOut,
-          animationDuration: const Duration(milliseconds: 400),
-          onTap: (index) {
-            setState(() {
-              bottomNavIndex = index;
-            });
-          },
-          letIndexChange: (index) => true,
-        ),
-      ),
     );
   }
 }
@@ -576,7 +627,7 @@ class FoodCard extends StatelessWidget {
             height: 210,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Color.fromARGB(255, 226, 222, 222),
+              color: const Color.fromARGB(255, 226, 222, 222),
             ),
           ),
           Column(
@@ -657,7 +708,13 @@ class FoodCard extends StatelessWidget {
             right: 10,
             child: GestureDetector(
               onTap: () {
-                print("tapped");
+                final item = CartItem(
+                  name: title,
+                  description: description,
+                  price: double.parse(amount.replaceAll('/-', '')),
+                  imagePath: imagePath,
+                );
+                context.read<CartProvider>().addItem(item);
               },
               child: const Image(
                 image: AssetImage("assets/images/icons8-add-50.png"),
@@ -672,3 +729,4 @@ class FoodCard extends StatelessWidget {
     );
   }
 }
+

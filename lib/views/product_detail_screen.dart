@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:food_app_wow/model/food_model.dart';
+import 'package:food_app_wow/provide/food_provider.dart';
 import 'package:food_app_wow/utils/const.dart';
 import 'package:food_app_wow/views/check_out_details.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String imagePath;
@@ -26,11 +29,29 @@ class ProductDetailScreen extends StatefulWidget {
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   bool isExpanded = false;
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final favoriteProvider = context.read<FavoriteItemProvider>();
+    FavoriteItem currentItem = FavoriteItem(
+      imagePath: widget.imagePath,
+      title: widget.title,
+      description: widget.description,
+      amount: widget.amount,
+    );
+    isFavorite = favoriteProvider.wishfoods.contains(currentItem);
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
     ));
+
+    final favoriteProvider = context.watch<FavoriteItemProvider>();
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return Scaffold(
@@ -69,9 +90,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   color: Colors.white, size: 30),
                             ),
                             IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.favorite_outline,
-                                  color: Colors.white, size: 30),
+                              onPressed: () {
+                                FavoriteItem currentItem = FavoriteItem(
+                                  imagePath: widget.imagePath,
+                                  title: widget.title,
+                                  description: widget.description,
+                                  amount: widget.amount,
+                                );
+
+                                if (!favoriteProvider.wishfoods
+                                    .contains(currentItem)) {
+                                  favoriteProvider.addToList(currentItem);
+                                } else {
+                                  favoriteProvider.removeFromList(currentItem);
+                                }
+
+                                // Update isFavorite based on the current state of wishfoods
+                                setState(() {
+                                  isFavorite = favoriteProvider.wishfoods
+                                      .contains(currentItem);
+                                });
+                              },
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: isFavorite ? Colors.red : Colors.white,
+                                size: 30,
+                              ),
                             ),
                           ],
                         ),
@@ -191,7 +237,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 7,
                                   ),
                                   Row(
@@ -302,7 +348,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Price",
                         style: TextStyle(
                           fontFamily: "Sora",
@@ -310,7 +356,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         widget.amount,
                         style: const TextStyle(
@@ -349,7 +395,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CheckOutDetails()),
+                                builder: (context) => const CheckOutDetails()),
                           );
                         },
                         icon: const Icon(

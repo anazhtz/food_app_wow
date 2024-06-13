@@ -4,7 +4,10 @@ import 'package:food_app_wow/views/login_screen.dart';
 import 'package:food_app_wow/views/sign_up_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -36,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen>
   void _onLoginPressed() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
     _loginController.forward().then((value) {
       _loginController.reverse();
@@ -46,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
   void _onSignUpPressed() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SignUpScreenState()),
+      MaterialPageRoute(builder: (context) => const SignUpScreenState()),
     );
     _signUpController.forward().then((value) {
       _signUpController.reverse();
@@ -140,7 +143,7 @@ class _SplashScreenState extends State<SplashScreen>
                               child: TextButton(
                                 onPressed: _onSignUpPressed,
                                 style: TextButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 30, vertical: 15),
                                 ),
                                 child: const Padding(
@@ -200,5 +203,23 @@ class _SplashScreenState extends State<SplashScreen>
         ],
       ),
     );
+  }
+}
+
+class TopWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0, 100);
+    path.quadraticBezierTo(size.width / 2, 0, size.width, 100);
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }
